@@ -2,7 +2,7 @@
 
 EuroScope plugin for the **AudioScope** app (TrackAudio Fluganzeige). It connects EuroScope to the app through a local WebSocket server. The app shows the aircraft you click in EuroScope, and you can issue clearances and set the ground status from the app.
 
-Current version: **0.22**
+Current version: **0.23**
 
 ## Features
 
