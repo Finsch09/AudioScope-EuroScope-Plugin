@@ -12,13 +12,17 @@ Current version: **0.23**
 - Set the ground status (startup, pushback, taxi, takeoff) from the app. Changes made in EuroScope are pushed back to the app immediately.
 - Reports the active airports and the number of open AudioScope radar screens to the app.
 
+> **You need the AudioScope app to use this plugin.**
+> [Download on the App Store](https://testflight.apple.com/join/KMcjuWSF) · [AudioScope on GitHub](https://github.com/Finsch09/AUDIOSCOPE_APP_REPO)
+
 ## Installation
 
 1. Download `AudioScope.dll` from the [latest release](../../releases/latest) and start EuroScope.
 2. Open **OTHER SET → Plug-ins ...**, click **Load** and select `AudioScope.dll`. EuroScope should report: `Plugin v0.22 geladen, WebSocket auf Port 49081`.
 3. In the same dialog, move **Standard ES radar screen** from "Forbidden to draw on types" to "Allowed to draw on types" (`<<`).
 4. Open **Open → New display → AudioScope**. This empty radar screen is only an anchor the plugin needs to trigger EuroScope functions (for example the clearance flag). Keep it open. EuroScope does not save this display type, so repeat this step after every start.
-5. In the app, enter the IP address of the PC running EuroScope. The plugin uses TCP port **49081**.
+5. Get the app from the [App Store](https://testflight.apple.com/join/KMcjuWSF) (source code and issues: [GitHub](https://github.com/Finsch09/AudioScope))
+6. In the app, enter the IP address of the PC running EuroScope. The plugin uses TCP port **49081**.
 
 Without an open AudioScope radar screen the plugin still works for selection and flight plan data, but it cannot set the clearance flag.
 
