@@ -37,8 +37,6 @@ static const char* ScratchFor(const std::string& key)
     if (key == "pushback") return "PUSH";
     if (key == "taxi")     return "TAXI";
     if (key == "takeoff")  return "DEPA";
-    // UNGEPRUEFT, Text geraten: das Log zeigt, ob EuroScope den Status wirklich aendert
-    if (key == "lineup")   return "LINEUP";
     return nullptr;
 }
 
@@ -199,7 +197,6 @@ struct Cmd { std::string cmd, callsign, arg; };
 
 // Ground-Status: Name in der App -> Wert in EuroScope (laut SDK: STUP, PUSH, TAXI, DEPA, TAXIIN).
 // Lesen geht direkt, Setzen nur ueber Scratchpad oder die eingebaute Tag-Funktion (oeffnet ein Menue).
-// "lineup" gibt es in EuroScope nicht und bleibt nur in der App.
 // Entfernt (ab v0.20): onfreq (FRQ), landing (ARR), parked (PARK).
 struct GroundStateMap { const char* key; const char* es; };
 static const GroundStateMap kGS[] = {
@@ -208,7 +205,6 @@ static const GroundStateMap kGS[] = {
     { "taxi",     "TAXI"  },
     { "takeoff",  "DEPA"  },
     { "taxiin",   "TAXIIN" },
-    { "lineup",   "LINEUP" },   // ungeprueft
 };
 
 static std::string NormGS(const std::string& s)
