@@ -13,7 +13,7 @@ Current version: **0.23**
 - Reports the active airports and the number of open AudioScope radar screens to the app.
 
 > **You need the AudioScope app to use this plugin.**
-> [Download on the App Store](https://testflight.apple.com/join/KMcjuWSF) · [AudioScope on GitHub](https://github.com/Finsch09/AUDIOSCOPE_APP_REPO)
+> [Download on the App Store](https://testflight.apple.com/join/KMcjuWSF) · [AudioScope on GitHub](https://github.com/Finsch09/AudioScope)
 
 ## Installation
 
