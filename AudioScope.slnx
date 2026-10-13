@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="AudioScope/AudioScope.vcxproj" Id="32e712f1-c050-4c2e-ab44-0c47b8456428" />
+</Solution>
