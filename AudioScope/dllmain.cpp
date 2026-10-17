@@ -25,7 +25,7 @@ using namespace EuroScopePlugIn;
 #define AS_GS_VIA_SCRATCHPAD 1
 
 // Plugin-Version (nur hier aendern)
-#define AS_VERSION "0.22"
+#define AS_VERSION "0.23"
 
 // 1 = ausfuehrliches Diagnose-Log in EuroScope, 0 = nur Wichtiges (Fehler, Verbindungen, Befehlsprobleme)
 #define AS_VERBOSE 0
