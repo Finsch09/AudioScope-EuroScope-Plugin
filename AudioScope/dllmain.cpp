@@ -25,18 +25,22 @@ using namespace EuroScopePlugIn;
 #define AS_GS_VIA_SCRATCHPAD 1
 
 // Plugin-Version (nur hier aendern)
-#define AS_VERSION "0.23"
+#define AS_VERSION "0.25"
 
 // 1 = ausfuehrliches Diagnose-Log in EuroScope, 0 = nur Wichtiges (Fehler, Verbindungen, Befehlsprobleme)
 #define AS_VERBOSE 0
 
-// Scratchpad-Text, den EuroScope als Ground-Status auswertet (ungeprueft, deshalb nur diese Eintraege)
+// Scratchpad-Text, den EuroScope als Ground-Status auswertet.
+// STUP/PUSH/TAXI/DEPA sind erprobt, NSTS/ONFREQ/LINEUP sind ungeprueft (Test mit .asgs TEXT).
 static const char* ScratchFor(const std::string& key)
 {
+    if (key == "pending")  return "NSTS";
+    if (key == "onfreq")   return "ONFREQ";
     if (key == "startup")  return "ST-UP";
-    if (key == "pushback") return "PUSH";
+    if (key == "push")     return "PUSH";
     if (key == "taxi")     return "TAXI";
-    if (key == "takeoff")  return "DEPA";
+    if (key == "lineup")   return "LINEUP";
+    if (key == "depa")     return "DEPA";
     return nullptr;
 }
 
@@ -192,19 +196,20 @@ static std::string ParseSelect(const std::string& p)
     return SafeToken(cs) ? cs : "";
 }
 
-// Befehl der App: {"cmd":"clearance"|"gs","callsign":"DLH2LY","arg":"on"|"off"|"pushback"...}
+// Befehl der App: {"cmd":"clearance"|"gs","callsign":"DLH2LY","arg":"on"|"off"|"push"...}
 struct Cmd { std::string cmd, callsign, arg; };
 
-// Ground-Status: Name in der App -> Wert in EuroScope (laut SDK: STUP, PUSH, TAXI, DEPA, TAXIIN).
+// Ground-Status: Name in der App -> Wert in EuroScope (Ground Radar Plugin).
 // Lesen geht direkt, Setzen nur ueber Scratchpad oder die eingebaute Tag-Funktion (oeffnet ein Menue).
-// Entfernt (ab v0.20): onfreq (FRQ), landing (ARR), parked (PARK).
 struct GroundStateMap { const char* key; const char* es; };
 static const GroundStateMap kGS[] = {
-    { "startup",  "STUP"  },
-    { "pushback", "PUSH"  },
-    { "taxi",     "TAXI"  },
-    { "takeoff",  "DEPA"  },
-    { "taxiin",   "TAXIIN" },
+    { "pending", "NSTS" },
+    { "onfreq",  "ONFREQ" },
+    { "startup", "STUP" },
+    { "push",    "PUSH" },
+    { "taxi",    "TAXI" },
+    { "lineup",  "LINEUP" },
+    { "depa",    "DEPA" },
 };
 
 static std::string NormGS(const std::string& s)
@@ -319,10 +324,11 @@ public:
 
     // Testbefehl in der EuroScope-Kommandozeile:  .asgs TEXT
     // Setzt den Scratchpad des ausgewaehlten Flugzeugs auf TEXT und meldet, ob sich der Ground-Status aendert.
-    // Damit lassen sich Kandidaten wie NSTS, LU ... ohne Neukompilieren ausprobieren.
+    // Damit lassen sich Kandidaten wie NSTS, ONFREQ, LINEUP ... ohne Neukompilieren ausprobieren.
     bool OnCompileCommand(const char* sCommandLine) override
     {
         std::string raw = S(sCommandLine);
+
         if (Lower(raw).compare(0, 5, ".asgs") != 0) return false;
 
         std::string text = raw.substr(5);
@@ -332,7 +338,7 @@ public:
         if (b != std::string::npos) text = text.substr(0, b + 1);
 
         if (text.empty()) {
-            LogMsg("Benutzung: Flugzeug anklicken, dann  .asgs TEXT  (zum Beispiel .asgs LU)");
+            LogMsg("Benutzung: Flugzeug anklicken, dann  .asgs TEXT  (zum Beispiel .asgs LINEUP)");
             return true;
         }
         CFlightPlan fp = FlightPlanSelectASEL();
