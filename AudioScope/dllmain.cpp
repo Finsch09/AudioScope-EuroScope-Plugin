@@ -31,7 +31,7 @@ using namespace EuroScopePlugIn;
 #define AS_VERBOSE 0
 
 // Scratchpad-Text, den EuroScope als Ground-Status auswertet.
-// STUP/PUSH/TAXI/DEPA sind erprobt, NSTS/ONFREQ/LINEUP sind ungeprueft (Test mit .asgs TEXT).
+// Alle sieben Texte sind erprobt. Neue Kandidaten lassen sich mit .asgs TEXT testen.
 static const char* ScratchFor(const std::string& key)
 {
     if (key == "pending")  return "NSTS";
@@ -281,7 +281,9 @@ public:
 
         // EuroScope gibt einem Plugin nur Radarschirme der Anzeigetypen, die es selbst anmeldet.
         // Danach erscheint "AudioScope" in der Liste der neu oeffenbaren Anzeigen.
-        RegisterDisplayType("AudioScope", false, false, false, true);
+        // Parameter: Name, NeedRadarContent, GeoReferenced, CanBeSaved, CanBeCreated.
+        // CanBeSaved = true: EuroScope speichert den Schirm mit der Anzeige-Einstellung (ASR) und oeffnet ihn beim Start wieder.
+        RegisterDisplayType("AudioScope", false, false, true, true);
         Dbg("Anzeigetyp \"AudioScope\" angemeldet (Open -> New display)");
     }
 
