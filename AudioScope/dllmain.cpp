@@ -25,7 +25,7 @@ using namespace EuroScopePlugIn;
 #define AS_GS_VIA_SCRATCHPAD 1
 
 // Plugin-Version (nur hier aendern)
-#define AS_VERSION "0.25"
+#define AS_VERSION "0.26"
 
 // 1 = ausfuehrliches Diagnose-Log in EuroScope, 0 = nur Wichtiges (Fehler, Verbindungen, Befehlsprobleme)
 #define AS_VERBOSE 0
@@ -163,6 +163,12 @@ static std::string Json(const std::string& cs, int seq)
 static std::string StatusJson(int screens)
 {
     return "{\"type\":\"status\",\"screens\":" + std::to_string(screens) + "}";
+}
+
+// Eigene Plugin-Version: wird der App beim Verbinden gemeldet (die App vergleicht sie mit der neuesten Version)
+static std::string VersionJson()
+{
+    return "{\"type\":\"version\",\"version\":\"" AS_VERSION "\"}";
 }
 
 // Wert eines String-Feldes aus einem einfachen JSON ({"key":"wert"}), sonst ""
@@ -835,6 +841,9 @@ private:
 
                 // Radarschirm-Status gleich mitsenden (0 = App zeigt nur Remarks)
                 if (!SendFrame(c.s, 0x1, StatusJson(m_screenCount.load()))) { c.alive = false; return; }
+
+                // Plugin-Version mitsenden (die App prueft damit, ob eine neuere Version verfuegbar ist)
+                if (!SendFrame(c.s, 0x1, VersionJson())) { c.alive = false; return; }
             }
             else {
                 // normale HTTP-Anfrage (Browser-Test): JSON ausliefern und schließen
